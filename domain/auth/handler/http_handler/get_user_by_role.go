@@ -5,15 +5,27 @@ import (
 	"net/http"
 	"sut-gateway-go/domain/auth/payload"
 	"sut-gateway-go/helpers/http_response"
-	authpb "sut-gateway-go/pb/auth"
-
 	"sut-gateway-go/helpers/timestamp"
+	"sut-gateway-go/pb/auth"
 
 	"github.com/gin-gonic/gin"
 )
 
-func (h *handler) RegisterUser(ctx *gin.Context) {
-	body := payload.RegisterUserPayload{}
+func (h *handler) GetUserByRole(ctx *gin.Context) {
+	userInfo, _ := ctx.Get("userInfo")
+
+	if userInfo.(*auth.UserInfo).Role != auth.Role_ADMIN {
+		response := http_response.Response{
+			StatusCode: http.StatusUnauthorized,
+			Message:    "Unauthorized",
+			Status:     "Unauthorized",
+			Timestamp:  timestamp.GetNow(),
+		}
+		ctx.JSON(http.StatusUnauthorized, response)
+		return
+	}
+
+	body := payload.GetUserPayload{}
 
 	if err := ctx.BindJSON(&body); err != nil {
 		response := http_response.Response{
@@ -25,13 +37,10 @@ func (h *handler) RegisterUser(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, response)
 		return
 	}
-	res, _ := h.auth.RegisterUser(context.Background(), &authpb.UserRegisterRequest{
-		AdminId:  body.AdminId,
-		Username: body.Username,
-		Name:     body.Name,
-		Password: body.Password,
-	})
 
+	res, _ := h.auth.GetUserByRole(context.Background(), &auth.GetUserByRoleRequest{
+		Role: body.Role,
+	})
 	if res.Error != "" {
 		response := http_response.Response{
 			StatusCode: http.StatusBadGateway,
@@ -45,9 +54,10 @@ func (h *handler) RegisterUser(ctx *gin.Context) {
 
 	response := http_response.Response{
 		StatusCode: http.StatusOK,
-		Message:    "Data successfuly registered",
+		Message:    "OK",
 		Status:     "OK",
 		Timestamp:  timestamp.GetNow(),
+		Data:       res.UserAdminInfo,
 	}
 
 	ctx.JSON(http.StatusOK, response)

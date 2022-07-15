@@ -5,15 +5,14 @@ import (
 	"net/http"
 	"sut-gateway-go/domain/auth/payload"
 	"sut-gateway-go/helpers/http_response"
-	authpb "sut-gateway-go/pb/auth"
-
 	"sut-gateway-go/helpers/timestamp"
+	"sut-gateway-go/pb/auth"
 
 	"github.com/gin-gonic/gin"
 )
 
-func (h *handler) RegisterUser(ctx *gin.Context) {
-	body := payload.RegisterUserPayload{}
+func (h *handler) Login(ctx *gin.Context) {
+	body := payload.LoginPayload{}
 
 	if err := ctx.BindJSON(&body); err != nil {
 		response := http_response.Response{
@@ -25,10 +24,9 @@ func (h *handler) RegisterUser(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, response)
 		return
 	}
-	res, _ := h.auth.RegisterUser(context.Background(), &authpb.UserRegisterRequest{
-		AdminId:  body.AdminId,
+
+	res, _ := h.auth.Login(context.Background(), &auth.LoginRequest{
 		Username: body.Username,
-		Name:     body.Name,
 		Password: body.Password,
 	})
 
@@ -36,18 +34,19 @@ func (h *handler) RegisterUser(ctx *gin.Context) {
 		response := http_response.Response{
 			StatusCode: http.StatusBadGateway,
 			Message:    res.Error,
-			Status:     "Bad Gateway",
+			Status:     "Bad Request",
 			Timestamp:  timestamp.GetNow(),
 		}
-		ctx.JSON(http.StatusBadGateway, response)
+		ctx.JSON(http.StatusBadRequest, response)
 		return
 	}
 
 	response := http_response.Response{
 		StatusCode: http.StatusOK,
-		Message:    "Data successfuly registered",
+		Message:    "OK",
 		Status:     "OK",
 		Timestamp:  timestamp.GetNow(),
+		Data:       res,
 	}
 
 	ctx.JSON(http.StatusOK, response)

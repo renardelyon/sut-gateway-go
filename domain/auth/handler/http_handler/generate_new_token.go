@@ -5,15 +5,16 @@ import (
 	"net/http"
 	"sut-gateway-go/domain/auth/payload"
 	"sut-gateway-go/helpers/http_response"
-	authpb "sut-gateway-go/pb/auth"
-
 	"sut-gateway-go/helpers/timestamp"
+	"sut-gateway-go/pb/auth"
+
+	"sut-gateway-go/domain/auth/response"
 
 	"github.com/gin-gonic/gin"
 )
 
-func (h *handler) RegisterUser(ctx *gin.Context) {
-	body := payload.RegisterUserPayload{}
+func (h *handler) GenerateNewToken(ctx *gin.Context) {
+	body := payload.GenerateNewTokenPayload{}
 
 	if err := ctx.BindJSON(&body); err != nil {
 		response := http_response.Response{
@@ -25,11 +26,9 @@ func (h *handler) RegisterUser(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, response)
 		return
 	}
-	res, _ := h.auth.RegisterUser(context.Background(), &authpb.UserRegisterRequest{
-		AdminId:  body.AdminId,
-		Username: body.Username,
-		Name:     body.Name,
-		Password: body.Password,
+
+	res, _ := h.auth.GenerateNewToken(context.Background(), &auth.GenerateNewTokenRequest{
+		RefreshToken: body.Token,
 	})
 
 	if res.Error != "" {
@@ -45,9 +44,10 @@ func (h *handler) RegisterUser(ctx *gin.Context) {
 
 	response := http_response.Response{
 		StatusCode: http.StatusOK,
-		Message:    "Data successfuly registered",
+		Message:    "Status OK",
 		Status:     "OK",
 		Timestamp:  timestamp.GetNow(),
+		Data:       response.NewGenerateTokenResponse(res.NewToken),
 	}
 
 	ctx.JSON(http.StatusOK, response)

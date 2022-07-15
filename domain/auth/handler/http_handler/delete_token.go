@@ -5,15 +5,14 @@ import (
 	"net/http"
 	"sut-gateway-go/domain/auth/payload"
 	"sut-gateway-go/helpers/http_response"
-	authpb "sut-gateway-go/pb/auth"
-
 	"sut-gateway-go/helpers/timestamp"
+	"sut-gateway-go/pb/auth"
 
 	"github.com/gin-gonic/gin"
 )
 
-func (h *handler) RegisterUser(ctx *gin.Context) {
-	body := payload.RegisterUserPayload{}
+func (h *handler) DeleteToken(ctx *gin.Context) {
+	body := payload.DeleteTokenPayload{}
 
 	if err := ctx.BindJSON(&body); err != nil {
 		response := http_response.Response{
@@ -25,11 +24,9 @@ func (h *handler) RegisterUser(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, response)
 		return
 	}
-	res, _ := h.auth.RegisterUser(context.Background(), &authpb.UserRegisterRequest{
-		AdminId:  body.AdminId,
-		Username: body.Username,
-		Name:     body.Name,
-		Password: body.Password,
+
+	res, _ := h.auth.DeleteToken(context.Background(), &auth.DeleteTokenRequest{
+		Token: body.Token,
 	})
 
 	if res.Error != "" {
@@ -45,7 +42,7 @@ func (h *handler) RegisterUser(ctx *gin.Context) {
 
 	response := http_response.Response{
 		StatusCode: http.StatusOK,
-		Message:    "Data successfuly registered",
+		Message:    "Token has been deleted",
 		Status:     "OK",
 		Timestamp:  timestamp.GetNow(),
 	}

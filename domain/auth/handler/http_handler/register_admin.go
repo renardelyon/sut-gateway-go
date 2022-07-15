@@ -5,15 +5,14 @@ import (
 	"net/http"
 	"sut-gateway-go/domain/auth/payload"
 	"sut-gateway-go/helpers/http_response"
-	authpb "sut-gateway-go/pb/auth"
-
 	"sut-gateway-go/helpers/timestamp"
+	authpb "sut-gateway-go/pb/auth"
 
 	"github.com/gin-gonic/gin"
 )
 
-func (h *handler) RegisterUser(ctx *gin.Context) {
-	body := payload.RegisterUserPayload{}
+func (h *handler) RegisterAdmin(ctx *gin.Context) {
+	body := payload.RegisterAdminPayload{}
 
 	if err := ctx.BindJSON(&body); err != nil {
 		response := http_response.Response{
@@ -25,11 +24,12 @@ func (h *handler) RegisterUser(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, response)
 		return
 	}
-	res, _ := h.auth.RegisterUser(context.Background(), &authpb.UserRegisterRequest{
-		AdminId:  body.AdminId,
-		Username: body.Username,
+
+	res, _ := h.auth.RegisterAdmin(context.Background(), &authpb.AdminRegisterRequest{
 		Name:     body.Name,
+		Username: body.Username,
 		Password: body.Password,
+		AdminKey: body.AdminKey,
 	})
 
 	if res.Error != "" {
