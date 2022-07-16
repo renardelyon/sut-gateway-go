@@ -23,6 +23,7 @@ func NewAuthMiddleWare(authClient auth.AuthServiceClient) gin.HandlerFunc {
 				Timestamp:  timestamp.GetNow(),
 			}
 			ctx.JSON(http.StatusUnauthorized, response)
+			ctx.AbortWithStatus(http.StatusUnauthorized)
 			return
 		}
 
@@ -36,6 +37,7 @@ func NewAuthMiddleWare(authClient auth.AuthServiceClient) gin.HandlerFunc {
 				Timestamp:  timestamp.GetNow(),
 			}
 			ctx.JSON(http.StatusUnauthorized, response)
+			ctx.AbortWithStatus(http.StatusUnauthorized)
 			return
 		}
 
@@ -51,6 +53,7 @@ func NewAuthMiddleWare(authClient auth.AuthServiceClient) gin.HandlerFunc {
 				Timestamp:  timestamp.GetNow(),
 			}
 			ctx.JSON(http.StatusUnauthorized, response)
+			ctx.AbortWithStatus(http.StatusUnauthorized)
 			return
 		}
 

@@ -1,7 +1,6 @@
 package route
 
 import (
-	"context"
 	"log"
 	"net/http"
 	"sut-gateway-go/config"
@@ -15,7 +14,7 @@ import (
 	authpb "sut-gateway-go/pb/auth"
 )
 
-func SetupAuthRouter(ctx context.Context, r *gin.Engine, cfg *config.Config) {
+func SetupAuthRouter(r *gin.Engine, cfg *config.Config) {
 	authGrpcConn, err := grpc.Dial(
 		cfg.AuthSvcUrl,
 		grpc.WithInsecure(),
