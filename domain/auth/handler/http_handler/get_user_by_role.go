@@ -3,7 +3,6 @@ package http_handler
 import (
 	"context"
 	"net/http"
-	"sut-gateway-go/domain/auth/payload"
 	"sut-gateway-go/helpers/http_response"
 	"sut-gateway-go/helpers/timestamp"
 	"sut-gateway-go/pb/auth"
@@ -12,6 +11,19 @@ import (
 )
 
 func (h *handler) GetUserByRole(ctx *gin.Context) {
+	query, ok := ctx.GetQuery("role")
+
+	if !ok {
+		response := http_response.Response{
+			StatusCode: http.StatusBadRequest,
+			Message:    "Query string role doesn't exist",
+			Status:     "Bad request",
+			Timestamp:  timestamp.GetNow(),
+		}
+		ctx.JSON(http.StatusUnauthorized, response)
+		return
+	}
+
 	userInfo, _ := ctx.Get("userInfo")
 
 	if userInfo.(*auth.UserInfo).Role != auth.Role_ADMIN {
@@ -25,21 +37,8 @@ func (h *handler) GetUserByRole(ctx *gin.Context) {
 		return
 	}
 
-	body := payload.GetUserPayload{}
-
-	if err := ctx.BindJSON(&body); err != nil {
-		response := http_response.Response{
-			StatusCode: http.StatusBadRequest,
-			Message:    err.Error(),
-			Status:     "Bad Request",
-			Timestamp:  timestamp.GetNow(),
-		}
-		ctx.JSON(http.StatusBadRequest, response)
-		return
-	}
-
 	res, _ := h.auth.GetUserByRole(context.Background(), &auth.GetUserByRoleRequest{
-		Role: body.Role,
+		Role: query,
 	})
 	if res.Error != "" {
 		response := http_response.Response{
