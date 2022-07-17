@@ -39,7 +39,7 @@ func (h *handler) ResetNotificationStatusQty(ctx *gin.Context) {
 
 	response := http_response.Response{
 		StatusCode: http.StatusOK,
-		Message:    "Notification Data",
+		Message:    "Notification reset successfully",
 		Status:     "OK",
 		Timestamp:  timestamp.GetNow(),
 	}
