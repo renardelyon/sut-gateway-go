@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"log"
 	"sut-gateway-go/config"
 
@@ -16,10 +15,13 @@ func main() {
 		log.Fatalln("error when load config")
 	}
 
-	ctx := context.Background()
-
 	r := gin.Default()
 
-	route.SetupAuthRouter(ctx, r, &cfg)
+	route.SetupAuthRouter(r, &cfg)
+	route.SetupAuthMiddleWare(r, &cfg)
+	route.SetupNotificationRouter(r, &cfg)
+	route.SetupOrderRouter(r, &cfg)
+	route.SetupStorageRouter(r, &cfg)
+	route.SetupProductRouter(r, &cfg)
 	r.Run(cfg.Port)
 }
