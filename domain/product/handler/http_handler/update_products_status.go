@@ -2,7 +2,6 @@ package http_handler
 
 import (
 	"context"
-	"log"
 	"net/http"
 	"sut-gateway-go/domain/product/payload"
 	"sut-gateway-go/helpers/http_response"
@@ -42,8 +41,6 @@ func (h *handler) UpdateProductsStatus(ctx *gin.Context) {
 		Status:       body.Status,
 		UserProducts: body.UserAndProductIds,
 	})
-
-	log.Println("res", res)
 
 	if res.Error != "" {
 		response := http_response.Response{
