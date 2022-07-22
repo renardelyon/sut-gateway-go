@@ -10,6 +10,26 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+type SwaggerUserAdmin struct {
+	Id       string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Username string `protobuf:"bytes,2,opt,name=username,proto3" json:"username,omitempty"`
+	Name     string `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`
+	Role     string `protobuf:"bytes,4,opt,name=role,proto3" json:"role,omitempty"`
+}
+
+// swagger:response GetUserByRoleResponse
+type SwaggerGetUserByRoleResponse struct {
+	// in:body
+	Body []SwaggerUserAdmin
+}
+
+// swagger:parameters GetUserByRoleQuery
+type SwaggerGetUserByRoleQuery struct {
+	// in: query
+	// example: admin
+	Role string
+}
+
 func (h *handler) GetUserByRole(ctx *gin.Context) {
 	query, ok := ctx.GetQuery("role")
 

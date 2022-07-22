@@ -1,6 +1,11 @@
 package http_response
 
-// status code 200
+// swagger:response swaggerResponse
+type SwaggerResponse struct {
+	// in: body
+	Body Response
+}
+
 type Response struct {
 	StatusCode int         `json:"statusCode"`
 	Message    string      `json:"message"`

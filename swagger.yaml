@@ -1,0 +1,289 @@
+basePath: /
+consumes:
+- application/json
+definitions:
+  DeleteTokenPayload:
+    properties:
+      token:
+        example: jwtToken
+        type: string
+        x-go-name: Token
+    type: object
+    x-go-package: _/Users/waresix/Code/sut-gateway-go/domain/auth/payload
+  GenerateNewTokenPayload:
+    properties:
+      token:
+        type: string
+        x-go-name: Token
+    type: object
+    x-go-package: _/Users/waresix/Code/sut-gateway-go/domain/auth/payload
+  GenerateNewTokenResponse:
+    properties:
+      accessToken:
+        type: string
+        x-go-name: AccessToken
+    type: object
+    x-go-package: _/Users/waresix/Code/sut-gateway-go/domain/auth/response
+  LoginPayload:
+    properties:
+      password:
+        type: string
+        x-go-name: Password
+      username:
+        type: string
+        x-go-name: Username
+    type: object
+    x-go-package: _/Users/waresix/Code/sut-gateway-go/domain/auth/payload
+  RegisterAdminPayload:
+    properties:
+      adminKey:
+        type: string
+        x-go-name: AdminKey
+      name:
+        type: string
+        x-go-name: Name
+      password:
+        type: string
+        x-go-name: Password
+      username:
+        type: string
+        x-go-name: Username
+    type: object
+    x-go-package: _/Users/waresix/Code/sut-gateway-go/domain/auth/payload
+  RegisterUserPayload:
+    properties:
+      adminId:
+        type: string
+        x-go-name: AdminId
+      name:
+        type: string
+        x-go-name: Name
+      password:
+        type: string
+        x-go-name: Password
+      username:
+        type: string
+        x-go-name: Username
+    type: object
+    x-go-package: _/Users/waresix/Code/sut-gateway-go/domain/auth/payload
+  Response:
+    properties:
+      data:
+        type: object
+        x-go-name: Data
+      message:
+        type: string
+        x-go-name: Message
+      status:
+        type: string
+        x-go-name: Status
+      statusCode:
+        format: int64
+        type: integer
+        x-go-name: StatusCode
+      timestamp:
+        type: string
+        x-go-name: Timestamp
+    type: object
+    x-go-package: _/Users/waresix/Code/sut-gateway-go/helpers/http_response
+  SwaggerUserAdmin:
+    properties:
+      id:
+        type: string
+        x-go-name: Id
+      name:
+        type: string
+        x-go-name: Name
+      role:
+        type: string
+        x-go-name: Role
+      username:
+        type: string
+        x-go-name: Username
+    type: object
+    x-go-package: _/Users/waresix/Code/sut-gateway-go/domain/auth/handler/http_handler
+  UserInfo:
+    properties:
+      adminId:
+        type: string
+        x-go-name: AdminId
+      id:
+        type: string
+        x-go-name: Id
+      name:
+        type: string
+        x-go-name: Name
+      role:
+        type: string
+        x-go-name: Role
+      username:
+        type: string
+        x-go-name: Username
+    type: object
+    x-go-package: _/Users/waresix/Code/sut-gateway-go/domain/auth/response
+info:
+  description: Documentation for sut api gateway
+  title: SUT-gateway-go.
+  version: 0.1.0
+paths:
+  /auth/auth-token:
+    post:
+      consumes:
+      - application/json
+      description: Get user info from jwt token
+      operationId: NoParams
+      produces:
+      - application/json
+      responses:
+        "200":
+          $ref: '#/responses/UserInfo'
+        "400":
+          $ref: '#/responses/swaggerResponse'
+      tags:
+      - Auth
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Login User and Admin
+      operationId: LoginPayload
+      parameters:
+      - in: body
+        name: Body
+        schema:
+          $ref: '#/definitions/LoginPayload'
+      produces:
+      - application/json
+      responses:
+        "200":
+          $ref: '#/responses/LoginResponse'
+        "400":
+          $ref: '#/responses/swaggerResponse'
+      tags:
+      - Auth
+  /auth/logout:
+    delete:
+      consumes:
+      - application/json
+      description: Delete token from database
+      operationId: DeleteToken
+      parameters:
+      - in: body
+        name: Body
+        schema:
+          $ref: '#/definitions/DeleteTokenPayload'
+      produces:
+      - application/json
+      responses:
+        "200":
+          $ref: '#/responses/swaggerResponse'
+        "400":
+          $ref: '#/responses/swaggerResponse'
+      tags:
+      - Auth
+  /auth/regenerate-token:
+    post:
+      consumes:
+      - application/json
+      description: Regenerate access token from refresh token
+      operationId: GenerateNewTokenPayload
+      parameters:
+      - in: body
+        name: Body
+        schema:
+          $ref: '#/definitions/GenerateNewTokenPayload'
+      produces:
+      - application/json
+      responses:
+        "200":
+          $ref: '#/responses/GenerateNewTokenResponse'
+        "400":
+          $ref: '#/responses/swaggerResponse'
+      tags:
+      - Auth
+  /auth/register:
+    get:
+      description: Get User that has registered to the app
+      operationId: GetUserByRoleQuery
+      parameters:
+      - in: query
+        name: Role
+        type: string
+      responses:
+        "200":
+          $ref: '#/responses/GetUserByRoleResponse'
+      tags:
+      - Auth
+    post:
+      description: Register User
+      operationId: RegisterUserPayload
+      parameters:
+      - in: body
+        name: Body
+        schema:
+          $ref: '#/definitions/RegisterUserPayload'
+      responses:
+        "200":
+          $ref: '#/responses/swaggerResponse'
+      tags:
+      - Auth
+  /auth/register-admin:
+    post:
+      consumes:
+      - application/json
+      description: Register Admin
+      operationId: RegisterAdminPayload
+      parameters:
+      - in: body
+        name: Body
+        schema:
+          $ref: '#/definitions/RegisterAdminPayload'
+      produces:
+      - application/json
+      responses:
+        "200":
+          $ref: '#/responses/swaggerResponse'
+        "400":
+          $ref: '#/responses/swaggerResponse'
+      tags:
+      - Auth
+produces:
+- application/json
+responses:
+  GenerateNewTokenResponse:
+    description: ""
+    schema:
+      $ref: '#/definitions/GenerateNewTokenResponse'
+  GetUserByRoleResponse:
+    description: ""
+    schema:
+      items:
+        $ref: '#/definitions/SwaggerUserAdmin'
+      type: array
+  LoginResponse:
+    description: ""
+    schema:
+      properties:
+        accessToken:
+          type: string
+          x-go-name: AccessToken
+        refreshToken:
+          type: string
+          x-go-name: RefreshToken
+        userInfo:
+          $ref: '#/definitions/UserInfo'
+      type: object
+  UserInfo:
+    description: ""
+    schema:
+      $ref: '#/definitions/UserInfo'
+  swaggerResponse:
+    description: ""
+    schema:
+      $ref: '#/definitions/Response'
+schemes:
+- http
+securityDefinitions:
+  basic:
+    type: basic
+swagger: "2.0"

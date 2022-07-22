@@ -1,6 +1,22 @@
 package response
 
-import authpb "sut-gateway-go/pb/auth"
+import (
+	authpb "sut-gateway-go/pb/auth"
+)
+
+// swagger:response LoginResponse
+type SwaggerLoginResponse struct {
+	// in: body
+	Body struct {
+		LoginResponse
+	}
+}
+
+// swagger:response UserInfo
+type SwaggerUserInfo struct {
+	// in: body
+	Body UserInfo
+}
 
 type UserInfo struct {
 	Username string `json:"username"`
