@@ -24,6 +24,18 @@ definitions:
         x-go-name: AccessToken
     type: object
     x-go-package: _/Users/waresix/Code/sut-gateway-go/domain/auth/response
+  GetNotificationResponse:
+    properties:
+      accepted:
+        format: int64
+        type: integer
+        x-go-name: Accepted
+      rejected:
+        format: int64
+        type: integer
+        x-go-name: Rejected
+    type: object
+    x-go-package: _/Users/waresix/Code/sut-gateway-go/domain/notification/response
   LoginPayload:
     properties:
       password:
@@ -206,7 +218,8 @@ paths:
       description: Get all users that has registered to the app
       operationId: GetUserByRoleQuery
       parameters:
-      - in: header
+      - example: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+        in: header
         name: Authorization
         required: true
         type: string
@@ -254,43 +267,37 @@ paths:
       - Auth
   /notification:
     get:
-      consumes:
-      - application/json
-      description: Delete token from database
-      operationId: DeleteToken
+      description: Get notification data by user id
+      operationId: GetNotificationByUserIdHeader
       parameters:
-      - in: body
-        name: Body
-        schema:
-          $ref: '#/definitions/DeleteTokenPayload'
-      produces:
-      - application/json
+      - example: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+        in: header
+        name: Authorization
+        required: true
+        type: string
       responses:
         "200":
-          $ref: '#/responses/swaggerResponse'
+          $ref: '#/responses/GetNotificationResponse'
         "400":
           $ref: '#/responses/swaggerResponse'
       tags:
-      - Auth
+      - Notification
     patch:
-      consumes:
-      - application/json
-      description: Delete token from database
-      operationId: DeleteToken
+      description: Reset notification status quantity
+      operationId: ResetNotificationStatusQtyHeader
       parameters:
-      - in: body
-        name: Body
-        schema:
-          $ref: '#/definitions/DeleteTokenPayload'
-      produces:
-      - application/json
+      - example: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+        in: header
+        name: Authorization
+        required: true
+        type: string
       responses:
         "200":
           $ref: '#/responses/swaggerResponse'
         "400":
           $ref: '#/responses/swaggerResponse'
       tags:
-      - Auth
+      - Notification
 produces:
 - application/json
 responses:
@@ -298,6 +305,10 @@ responses:
     description: ""
     schema:
       $ref: '#/definitions/GenerateNewTokenResponse'
+  GetNotificationResponse:
+    description: ""
+    schema:
+      $ref: '#/definitions/GetNotificationResponse'
   GetUserByRoleResponse:
     description: ""
     schema:

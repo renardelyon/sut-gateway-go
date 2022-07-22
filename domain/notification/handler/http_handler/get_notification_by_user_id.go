@@ -12,6 +12,14 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// swagger:parameters GetNotificationByUserIdHeader
+type GetNotificationByUserIdHeader struct {
+	// in: header
+	// required: true
+	// example: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+	Authorization string
+}
+
 func (h *handler) GetNotificationByUserId(ctx *gin.Context) {
 	select {
 	case <-ctx.Done():

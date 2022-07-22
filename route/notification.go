@@ -25,6 +25,22 @@ func SetupNotificationRouter(r *gin.Engine, cfg *config.Config) {
 	httpHandler := http_handler.NewNotificationHandler(notifGrpcService)
 
 	routes := r.Group("/notification")
+
+	// swagger:route GET /notification Notification GetNotificationByUserIdHeader
+	//
+	// Get notification data by user id
+	//
+	// Responses:
+	//  200: GetNotificationResponse
+	//  400: swaggerResponse
 	routes.GET("/", httpHandler.GetNotificationByUserId)
+
+	// swagger:route PATCH /notification Notification ResetNotificationStatusQtyHeader
+	//
+	// Reset notification status quantity
+	//
+	// Responses:
+	//  200: swaggerResponse
+	//  400: swaggerResponse
 	routes.PATCH("/", httpHandler.ResetNotificationStatusQty)
 }
