@@ -387,6 +387,27 @@ paths:
           $ref: '#/responses/swaggerResponse'
       tags:
       - Order
+  /storage/add:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Upload file into google drive
+      operationId: AddFilePayload
+      parameters:
+      - in: formData
+        name: file
+        required: true
+        type: file
+        x-go-name: File
+      produces:
+      - application/json
+      responses:
+        "200":
+          $ref: '#/responses/swaggerResponse'
+        "400":
+          $ref: '#/responses/swaggerResponse'
+      tags:
+      - Storage
 produces:
 - application/json
 responses:

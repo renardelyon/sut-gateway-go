@@ -24,5 +24,19 @@ func SetupStorageRouter(r *gin.Engine, cfg *config.Config) {
 	httpHandler := http_handler.NewStorageHandler(storageGrpcService)
 
 	routes := r.Group("/storage")
+
+	// swagger:route POST /storage/add Storage AddFilePayload
+	//
+	// Upload file into google drive
+	//
+	// Consumes:
+	// - multipart/form-data
+	//
+	// Produces:
+	// - application/json
+	//
+	// Responses:
+	//  200: swaggerResponse
+	//  400: swaggerResponse
 	routes.POST("/add", httpHandler.AddFile)
 }
