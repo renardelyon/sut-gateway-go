@@ -9,6 +9,12 @@ type GetDetailProductsResponse struct {
 	Url         string `json:"url"`
 }
 
+// swagger:response GetDetailProductsResponse
+type SwaggerGetDetailProductsResponse struct {
+	// in: body
+	Body GetDetailProductsResponse
+}
+
 func NewGetDetailProductsResponse(res *orderpb.GetDetailProductsResponse) GetDetailProductsResponse {
 	return GetDetailProductsResponse{
 		Name:        res.Detailproduct.Name,

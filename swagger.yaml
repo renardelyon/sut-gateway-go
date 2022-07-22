@@ -2,6 +2,16 @@ basePath: /
 consumes:
 - application/json
 definitions:
+  CreateOrderPayload:
+    properties:
+      productName:
+        type: string
+        x-go-name: ProductName
+      url:
+        type: string
+        x-go-name: Url
+    type: object
+    x-go-package: _/Users/waresix/Code/sut-gateway-go/domain/order/payload
   DeleteTokenPayload:
     properties:
       token:
@@ -24,6 +34,22 @@ definitions:
         x-go-name: AccessToken
     type: object
     x-go-package: _/Users/waresix/Code/sut-gateway-go/domain/auth/response
+  GetDetailProductsResponse:
+    properties:
+      description:
+        type: string
+        x-go-name: Description
+      image:
+        type: string
+        x-go-name: Image
+      name:
+        type: string
+        x-go-name: Name
+      url:
+        type: string
+        x-go-name: Url
+    type: object
+    x-go-package: _/Users/waresix/Code/sut-gateway-go/domain/order/response
   GetNotificationResponse:
     properties:
       accepted:
@@ -298,6 +324,69 @@ paths:
           $ref: '#/responses/swaggerResponse'
       tags:
       - Notification
+  /order:
+    post:
+      description: Create single order
+      operationId: CreateOrderPayload
+      parameters:
+      - in: body
+        name: Body
+        schema:
+          $ref: '#/definitions/CreateOrderPayload'
+      responses:
+        "200":
+          $ref: '#/responses/swaggerResponse'
+        "400":
+          $ref: '#/responses/swaggerResponse'
+      tags:
+      - Order
+  /order/bulk:
+    post:
+      description: Create bulk order
+      operationId: CreateOrderBulkHeader
+      parameters:
+      - example: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      responses:
+        "200":
+          $ref: '#/responses/swaggerResponse'
+        "400":
+          $ref: '#/responses/swaggerResponse'
+      tags:
+      - Order
+  /order/detail-product:
+    get:
+      description: Get product detail
+      operationId: GetDetailProductsQuery
+      parameters:
+      - in: query
+        name: Url
+        type: string
+      responses:
+        "200":
+          $ref: '#/responses/GetDetailProductsResponse'
+        "400":
+          $ref: '#/responses/swaggerResponse'
+      tags:
+      - Order
+  /order/products-by-keyword:
+    get:
+      description: Get products from bukalapak
+      operationId: GetProductsToOrderByKeywordQuery
+      parameters:
+      - in: query
+        name: Keyword
+        type: string
+      responses:
+        "200":
+          $ref: '#/responses/GetProductsToOrderResponse'
+        "400":
+          $ref: '#/responses/swaggerResponse'
+      tags:
+      - Order
 produces:
 - application/json
 responses:
@@ -305,10 +394,18 @@ responses:
     description: ""
     schema:
       $ref: '#/definitions/GenerateNewTokenResponse'
+  GetDetailProductsResponse:
+    description: ""
+    schema:
+      $ref: '#/definitions/GetDetailProductsResponse'
   GetNotificationResponse:
     description: ""
     schema:
       $ref: '#/definitions/GetNotificationResponse'
+  GetProductsToOrderResponse:
+    description: ""
+    schema:
+      $ref: '#/definitions/GetDetailProductsResponse'
   GetUserByRoleResponse:
     description: ""
     schema:

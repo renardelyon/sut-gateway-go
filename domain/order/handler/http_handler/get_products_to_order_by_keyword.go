@@ -12,6 +12,12 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// swagger:parameters GetProductsToOrderByKeywordQuery
+type GetProductsToOrderByKeywordQuery struct {
+	// in: query
+	Keyword string
+}
+
 func (h *handler) GetProductsToOrderByKeyword(ctx *gin.Context) {
 	select {
 	case <-ctx.Done():

@@ -12,6 +12,12 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// swagger:parameters GetDetailProductsQuery
+type GetDetailProductsQuery struct {
+	// in: query
+	Url string
+}
+
 func (h *handler) GetDetailProducts(ctx *gin.Context) {
 	select {
 	case <-ctx.Done():

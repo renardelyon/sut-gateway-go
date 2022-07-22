@@ -12,6 +12,12 @@ type ProductInfo struct {
 
 type GetProductsToOrderResponse []ProductInfo
 
+// swagger:response GetProductsToOrderResponse
+type SwaggerGetProductsToOrderResponse struct {
+	// in: body
+	Body GetDetailProductsResponse
+}
+
 func NewGetProductsToOrderResponse(res *orderpb.GetProductsToOrderResponse) (GetProductsToOrderResponse, error) {
 	var response GetProductsToOrderResponse
 
