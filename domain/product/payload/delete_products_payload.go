@@ -6,6 +6,11 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// swagger:parameters DeleteProductsPayload
+type SwaggerDeleteProductsPayload struct {
+	// in: body
+	Body DeleteProductsPayload
+}
 type DeleteProductsPayload struct {
 	UserAndProductsIds []UserAndProduct `json:"userAndProductsIds"`
 }

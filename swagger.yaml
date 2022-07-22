@@ -12,6 +12,15 @@ definitions:
         x-go-name: Url
     type: object
     x-go-package: _/Users/waresix/Code/sut-gateway-go/domain/order/payload
+  DeleteProductsPayload:
+    properties:
+      userAndProductsIds:
+        items:
+          $ref: '#/definitions/UserAndProduct'
+        type: array
+        x-go-name: UserAndProductsIds
+    type: object
+    x-go-package: _/Users/waresix/Code/sut-gateway-go/domain/product/payload
   DeleteTokenPayload:
     properties:
       token:
@@ -72,6 +81,16 @@ definitions:
         x-go-name: Username
     type: object
     x-go-package: _/Users/waresix/Code/sut-gateway-go/domain/auth/payload
+  ProductInfo:
+    properties:
+      productName:
+        type: string
+        x-go-name: Name
+      url:
+        type: string
+        x-go-name: Url
+    type: object
+    x-go-package: _/Users/waresix/Code/sut-gateway-go/domain/product/response
   RegisterAdminPayload:
     properties:
       adminKey:
@@ -140,6 +159,38 @@ definitions:
         x-go-name: Username
     type: object
     x-go-package: _/Users/waresix/Code/sut-gateway-go/domain/auth/handler/http_handler
+  UpdateProductsPayload:
+    properties:
+      status:
+        type: string
+        x-go-name: Status
+      userAndProductIds:
+        items:
+          $ref: '#/definitions/UserAndProductId'
+        type: array
+        x-go-name: UserAndProductIds
+    type: object
+    x-go-package: _/Users/waresix/Code/sut-gateway-go/domain/product/payload
+  UserAndProduct:
+    properties:
+      productId:
+        type: string
+        x-go-name: ProductId
+      userId:
+        type: string
+        x-go-name: UserId
+    type: object
+    x-go-package: _/Users/waresix/Code/sut-gateway-go/domain/product/payload
+  UserAndProductId:
+    properties:
+      productId:
+        type: string
+        x-go-name: ProductId
+      userId:
+        type: string
+        x-go-name: UserId
+    type: object
+    x-go-package: _/Users/waresix/Code/sut-gateway-go/domain/product/payload
   UserInfo:
     properties:
       adminId:
@@ -372,6 +423,22 @@ paths:
           $ref: '#/responses/swaggerResponse'
       tags:
       - Order
+  /order/product-delete:
+    delete:
+      description: Delete products from database
+      operationId: DeleteProductsPayload
+      parameters:
+      - in: body
+        name: Body
+        schema:
+          $ref: '#/definitions/DeleteProductsPayload'
+      responses:
+        "200":
+          $ref: '#/responses/swaggerResponse'
+        "400":
+          $ref: '#/responses/swaggerResponse'
+      tags:
+      - Product
   /order/products-by-keyword:
     get:
       description: Get products from bukalapak
@@ -387,6 +454,39 @@ paths:
           $ref: '#/responses/swaggerResponse'
       tags:
       - Order
+  /product/products:
+    get:
+      description: Get all products that have been requested by user
+      operationId: GetAllProductsQuery
+      parameters:
+      - example: admin or user
+        in: query
+        name: Status
+        required: true
+        type: string
+      responses:
+        "200":
+          $ref: '#/responses/GetAllProductsResponse'
+        "400":
+          $ref: '#/responses/swaggerResponse'
+      tags:
+      - Product
+  /product/update-status:
+    patch:
+      description: Update product status with either rejected or accepted
+      operationId: UpdateProductsPayload
+      parameters:
+      - in: body
+        name: Body
+        schema:
+          $ref: '#/definitions/UpdateProductsPayload'
+      responses:
+        "200":
+          $ref: '#/responses/swaggerResponse'
+        "400":
+          $ref: '#/responses/swaggerResponse'
+      tags:
+      - Product
   /storage/add:
     post:
       consumes:
@@ -415,6 +515,12 @@ responses:
     description: ""
     schema:
       $ref: '#/definitions/GenerateNewTokenResponse'
+  GetAllProductsResponse:
+    description: ""
+    schema:
+      items:
+        $ref: '#/definitions/ProductInfo'
+      type: array
   GetDetailProductsResponse:
     description: ""
     schema:

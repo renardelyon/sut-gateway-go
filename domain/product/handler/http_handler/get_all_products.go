@@ -13,6 +13,14 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// swagger:parameters GetAllProductsQuery
+type SwaggerGetAllProducts struct {
+	// in: query
+	// example: admin or user
+	// Required: true
+	Status string
+}
+
 func (h *handler) GetAllProducts(ctx *gin.Context) {
 	select {
 	case <-ctx.Done():

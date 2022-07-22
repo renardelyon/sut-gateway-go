@@ -12,6 +12,12 @@ type UserAndProductId struct {
 	ProductId string `json:"productId"`
 }
 
+// swagger:parameters UpdateProductsPayload
+type SwaggerUpdateProductsPayload struct {
+	// in: body
+	Body UpdateProductsPayload
+}
+
 type UpdateProductsPayload struct {
 	Status            string             `json:"status"`
 	UserAndProductIds []UserAndProductId `json:"userAndProductIds"`

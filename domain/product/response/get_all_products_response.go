@@ -13,7 +13,9 @@ type ProductInfo struct {
 	Url  string `json:"url"`
 }
 
+// swagger:response GetAllProductsResponse
 type GetAllProductsResponse struct {
+	// in: body
 	ProductInfos []ProductInfo `json:"products"`
 }
 
