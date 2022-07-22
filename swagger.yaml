@@ -203,10 +203,15 @@ paths:
       - Auth
   /auth/register:
     get:
-      description: Get User that has registered to the app
+      description: Get all users that has registered to the app
       operationId: GetUserByRoleQuery
       parameters:
-      - in: query
+      - in: header
+        name: Authorization
+        required: true
+        type: string
+      - example: admin
+        in: query
         name: Role
         type: string
       responses:
@@ -238,6 +243,45 @@ paths:
         name: Body
         schema:
           $ref: '#/definitions/RegisterAdminPayload'
+      produces:
+      - application/json
+      responses:
+        "200":
+          $ref: '#/responses/swaggerResponse'
+        "400":
+          $ref: '#/responses/swaggerResponse'
+      tags:
+      - Auth
+  /notification:
+    get:
+      consumes:
+      - application/json
+      description: Delete token from database
+      operationId: DeleteToken
+      parameters:
+      - in: body
+        name: Body
+        schema:
+          $ref: '#/definitions/DeleteTokenPayload'
+      produces:
+      - application/json
+      responses:
+        "200":
+          $ref: '#/responses/swaggerResponse'
+        "400":
+          $ref: '#/responses/swaggerResponse'
+      tags:
+      - Auth
+    patch:
+      consumes:
+      - application/json
+      description: Delete token from database
+      operationId: DeleteToken
+      parameters:
+      - in: body
+        name: Body
+        schema:
+          $ref: '#/definitions/DeleteTokenPayload'
       produces:
       - application/json
       responses:
