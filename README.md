@@ -50,4 +50,4 @@ make run
 ```
 
 ## API Documentation
-[WIP]
+https://app.swaggerhub.com/apis-docs/renardelyon/sut-gateway_go/0.1.0
